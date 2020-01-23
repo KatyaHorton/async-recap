@@ -1,5 +1,7 @@
 const cyanColor = "\x1b[36m%s\x1b[0m";
-const blueColor = "\x1b[34m";
+const blueColor = "\x1b[34m%s\x1b[0m";
+const redColor = "\x1b[31m%s\x1b[0m";
+
 const getUser = id => {
   console.log(cyanColor, `Fetching user with id: ${id}...`);
   return new Promise((res, rej) => {
@@ -21,16 +23,10 @@ const getRepositories = user => {
 };
 
 getUser(1)
-  .then(result =>
-    getRepositories(result)
-      .then(res =>
-        getCommits(res)
-          .then(res => displayCommits(res))
-          .catch(err => console.log(`Error: ${err.message}`))
-      )
-      .catch(err => console.log(`Error: ${err.message}`))
-  )
-  .catch(err => console.log("Error: ", err.message));
+  .then(result => getRepositories(result))
+  .then(res => getCommits(res))
+  .then(res => displayCommits(res))
+  .catch(err => console.log(redColor, `Error: , ${err.message}`));
 
 const getCommits = repos => {
   console.log(cyanColor, `Getting commits for repo: ${repos[0]}...`);
