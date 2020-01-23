@@ -1,5 +1,7 @@
+const cyanColor = "\x1b[36m%s\x1b[0m";
+const blueColor = "\x1b[34m";
 const getUser = id => {
-  console.log(`Fetching user with id: ${id}...`);
+  console.log(cyanColor, `Fetching user with id: ${id}...`);
   return new Promise((res, rej) => {
     setTimeout(() => {
       if (true) res({ id: id, name: "Katya" });
@@ -9,7 +11,7 @@ const getUser = id => {
 };
 
 const getRepositories = user => {
-  console.log(`Getting repos for user: ${user.name}...`);
+  console.log(cyanColor, `Getting repos for user: ${user.name}...`);
   return new Promise((res, rej) => {
     setTimeout(() => {
       if (true) res([1, 2, 3]);
@@ -21,13 +23,17 @@ const getRepositories = user => {
 getUser(1)
   .then(result =>
     getRepositories(result)
-      .then(res => getCommits(res).then(res => displayCommits(res)))
+      .then(res =>
+        getCommits(res)
+          .then(res => displayCommits(res))
+          .catch(err => console.log(`Error: ${err.message}`))
+      )
       .catch(err => console.log(`Error: ${err.message}`))
   )
   .catch(err => console.log("Error: ", err.message));
 
 const getCommits = repos => {
-  console.log(`Getting commits for repo: ${repos[0]}...`);
+  console.log(cyanColor, `Getting commits for repo: ${repos[0]}...`);
   return new Promise((res, rej) => {
     setTimeout(() => {
       if (true) {
@@ -35,13 +41,13 @@ const getCommits = repos => {
         res(commits);
       }
       rej(new Error(`Could not get commits for repo: ${repos[0]}.`));
-      console.log("Logging commits...");
+      console.log(cyanColor, "Logging commits...");
     }, 2000);
   });
 };
 
 function displayCommits(commits) {
   setTimeout(() => {
-    console.log(`Commits: ${commits}`);
+    console.log(blueColor, `Commits: ${commits}`);
   }, 2000);
 }
