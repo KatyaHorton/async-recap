@@ -1,33 +1,47 @@
-getUser(1, getRepositories);
+const getUser = id => {
+  console.log(`Fetching user with id: ${id}...`);
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      if (true) res({ id: id, name: "Katya" });
+      rej(new Error(`Could not fetch user with id ${id}.`));
+    }, 2000);
+  });
+};
 
-function getRepositories(user, callback2) {
+const getRepositories = user => {
   console.log(`Getting repos for user: ${user.name}...`);
-  setTimeout(() => {
-    const repos = [1, 2, 3];
-    console.log(`Repos for ${user.name}: ${repos}`);
-    callback2(repos, displayCommits);
-  }, 2000);
-}
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      if (true) res([1, 2, 3]);
+      rej(new Error(`Could not fetch repositories for ${user.name}.`));
+    }, 2000);
+  });
+};
 
-function getCommits(repos, callback3) {
+getUser(1)
+  .then(result =>
+    getRepositories(result)
+      .then(res => getCommits(res).then(res => displayCommits(res)))
+      .catch(err => console.log(`Error: ${err.message}`))
+  )
+  .catch(err => console.log("Error: ", err.message));
+
+const getCommits = repos => {
   console.log(`Getting commits for repo: ${repos[0]}...`);
-  setTimeout(() => {
-    const commits = ["Commit 1 ", "Commit 2 ", "Commit 3 "];
-    console.log("Logging commits...");
-    callback3(commits);
-  }, 2000);
-}
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      if (true) {
+        const commits = ["Commit 1 ", "Commit 2 ", "Commit 3 "];
+        res(commits);
+      }
+      rej(new Error(`Could not get commits for repo: ${repos[0]}.`));
+      console.log("Logging commits...");
+    }, 2000);
+  });
+};
 
 function displayCommits(commits) {
   setTimeout(() => {
     console.log(`Commits: ${commits}`);
-  }, 2000);
-}
-
-function getUser(id, callback) {
-  console.log(`Getting user with id ${id} from DB...`);
-  setTimeout(() => {
-    console.log("User: ", { id: id, name: "Katya" });
-    callback({ id: id, name: "Katya" }, getCommits);
   }, 2000);
 }
