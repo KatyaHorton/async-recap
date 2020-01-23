@@ -6,6 +6,7 @@ const getUser = id => {
   console.log(cyanColor, `Fetching user with id: ${id}...`);
   return new Promise((res, rej) => {
     setTimeout(() => {
+      console.log("Fetched.");
       if (true) res({ id: id, name: "Katya" });
       rej(new Error(`Could not fetch user with id ${id}.`));
     }, 2000);
@@ -21,12 +22,6 @@ const getRepositories = user => {
     }, 2000);
   });
 };
-
-getUser(1)
-  .then(result => getRepositories(result))
-  .then(res => getCommits(res))
-  .then(res => displayCommits(res))
-  .catch(err => console.log(redColor, `Error: , ${err.message}`));
 
 const getCommits = repos => {
   console.log(cyanColor, `Getting commits for repo: ${repos[0]}...`);
@@ -47,3 +42,20 @@ function displayCommits(commits) {
     console.log(blueColor, `Commits: ${commits}`);
   }, 2000);
 }
+
+// getUser(1)
+//   .then(result => getRepositories(result))
+//   .then(res => getCommits(res))
+//   .then(res => displayCommits(res))
+//   .catch(err => console.log(redColor, `Error: , ${err.message}`));
+
+const asyncFunction = async () => {
+  const user = await getUser("1");
+  console.log("1");
+  const repos = await getRepositories(user);
+  console.log("2");
+  const commits = await getCommits(repos);
+  displayCommits(commits);
+};
+
+asyncFunction();
